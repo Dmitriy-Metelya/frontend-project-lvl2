@@ -1,0 +1,27 @@
+{
+  "name": "@hexlet/code",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "format diff generator",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "bin": {
+    "gendiff": "./bin/gendiff.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dmitriy-Metelya/frontend-project-lvl2.git"
+  },
+  "author": "Dmitriy Metelya",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Dmitriy-Metelya/frontend-project-lvl2/issues"
+  },
+  "homepage": "https://github.com/Dmitriy-Metelya/frontend-project-lvl2#readme",
+  "dependencies": {
+    "commander": "^7.0.0",
+    "lodash": "^4.17.20"
+  }
+}
