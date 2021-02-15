@@ -1,6 +1,8 @@
-const showHelp = () =>
-  console.log(
-    'Usage: gendiff [options]\n\nCompares two configuration files and shows a difference.\n\nOptions:\n  -V, --version        output the version number\n  -h, --help           output usage information',
-  );
+import { readFileSync } from 'fs';
+
+const showHelp = () => {
+  const helpText = readFileSync('./src/help', 'utf-8');
+  console.log(helpText);
+};
 
 export default showHelp;
