@@ -1,9 +1,13 @@
 #!/usr/bin/env node
 
 import { program } from 'commander';
+import { readFileSync } from 'fs';
 import showHelp from '../src/help.js';
 
-program.version('0.0.1');
+const packageJson = readFileSync('package.json');
+const version = JSON.parse(packageJson);
+
+program.version(version.version);
 program.option('-h, --help', 'output usage information');
 program.parse();
 
