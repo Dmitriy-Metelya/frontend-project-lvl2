@@ -7,12 +7,17 @@ import showHelp from '../src/help.js';
 const packageJson = readFileSync('package.json');
 const version = JSON.parse(packageJson);
 
-program.version(version.version);
-program.option('-h, --help', 'output usage information');
-program.parse();
+program
+  .option('-h, --help', 'output usage information')
+  .option('-f, --format <type>', 'output format')
+  .version(version.version)
+  .parse();
 
 const options = program.opts();
 
 if (options.help) {
   showHelp();
+}
+if (options.format) {
+  // do something with options.format
 }
