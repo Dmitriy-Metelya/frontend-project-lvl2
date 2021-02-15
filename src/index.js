@@ -1,4 +1,5 @@
 import { readFileSync } from 'fs';
+import '_' from 'lodash';
 
 const stringify = (diffs) => diffs.join('\n');
 
