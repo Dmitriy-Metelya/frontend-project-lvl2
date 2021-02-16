@@ -1,0 +1,9 @@
+{
+  "name": "@hexlet/code",
+  "version": "5.0.1",
+  "description": "my first project",
+  "main": "bin/brain-games.js",
+  "type": "module",
+  "author": "Dmitriy Metelya",
+  "license": "ISC"
+}
