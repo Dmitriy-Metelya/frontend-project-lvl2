@@ -1,17 +1,12 @@
-import { readFileSync, existsSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
 import _ from 'lodash';
-import path from 'path';
-import process from 'process';
 
 const stringify = (diffs) => diffs.join('\n');
 
 const genDiff = (filepath1, filepath2) => {
-  const currentDirectoryName = process.cwd();
-  const fullFilepath1 = path.resolve(currentDirectoryName, filepath1);
-  const fullFilepath2 = path.resolve(currentDirectoryName, filepath2);
-  const file1Content = readFileSync(existsSync(fullFilepath1) ? fullFilepath1 : filepath1, 'utf-8');
+  const file1Content = readFileSync(existsSync(filepath1) ? filepath1 : filepath1, 'utf-8');
   const file1Object = JSON.parse(file1Content);
-  const file2Content = readFileSync(existsSync(fullFilepath2) ? fullFilepath2 : filepath2, 'utf-8');
+  const file2Content = readFileSync(existsSync(filepath2) ? filepath2 : filepath2, 'utf-8');
   const file2Object = JSON.parse(file2Content);
   const leftMergedObject = { ...file2Object, ...file1Object };
   const leftMergedEntries = Object.entries(leftMergedObject);

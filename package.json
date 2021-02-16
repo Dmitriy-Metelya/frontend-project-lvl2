@@ -5,7 +5,7 @@
   "description": "format diff generator",
   "main": "src/index.js",
   "scripts": {
-    "test": "npx jest"
+    "test": "jest"
   },
   "bin": {
     "gendiff": "./bin/gendiff.js"
@@ -20,15 +20,15 @@
     "url": "https://github.com/Dmitriy-Metelya/frontend-project-lvl2/issues"
   },
   "homepage": "https://github.com/Dmitriy-Metelya/frontend-project-lvl2#readme",
-  "jest": {
-    "testEnvironment": "node",
-    "transform": {}
-  },
   "dependencies": {
     "commander": "^7.0.0",
     "lodash": "^4.17.20"
   },
   "devDependencies": {
+    "@babel/core": "^7.12.16",
+    "@babel/preset-env": "^7.12.16",
+    "@types/jest": "^26.0.20",
+    "babel-jest": "^26.6.3",
     "jest": "^26.6.3"
   }
 }
