@@ -1,5 +1,5 @@
 test:
-	npm test -- --watch
+	npm test
 
 lint:
 	npx eslint .
