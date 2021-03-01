@@ -1,14 +1,17 @@
-install:
-	npm ci
-
-publish:
-	npm publish --dry-run
+test:
+	npm test -- --watch
 
 lint:
 	npx eslint .
 
-test:
-	npm run test
+build:
+	./bin/generate-version.js
+	
+publish:
+	npm publish --dry-run
+
+install:
+	npm ci
 
 help:
 	./bin/gendiff.js -h
