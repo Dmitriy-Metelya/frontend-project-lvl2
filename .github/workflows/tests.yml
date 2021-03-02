@@ -13,10 +13,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Install package
-        env:
-          DEFAULT_BRANCH: main
         run: make install
       - name: Run tests
-        env:
-          DEFAULT_BRANCH: main
         run: make test
