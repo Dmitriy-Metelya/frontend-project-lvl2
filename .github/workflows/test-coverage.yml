@@ -17,13 +17,13 @@ jobs:
           DEFAULT_BRANCH: main
         run: make install
       - name: Setup Code Climate test-reporter
-          run:
-            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-            chmod +x ./cc-test-reporter
+        run: |
+          curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+          chmod +x ./cc-test-reporter
       - name: Check test coverage
-          env:
-            CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
-          run:
-            ./cc-test-reporter before-build
-            make test-coverage
-            ./cc-test-reporter after-build --exit-code $?
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+        run: |
+          ./cc-test-reporter before-build
+          make test-coverage
+          ./cc-test-reporter after-build --exit-code $?
