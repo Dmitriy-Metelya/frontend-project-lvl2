@@ -8,20 +8,104 @@ const getFixturePath = (filename) => {
 
   return resolve(__dirname, '..', '__fixtures__', format, filename);
 };
-const flat3ToFlat4Diff = '  author: Dmitriy Metelya\n- description: my first project\n- license: ISC\n  main: bin/brain-games.js\n+ model: first\n  name: @hexlet/code\n  type: module\n- version: 5.0.1\n+ version: 0.4.0';
-const flat4ToFlat5Diff = '- author: Dmitriy Metelya\n  main: bin/brain-games.js\n- model: first\n  name: @hexlet/code\n+ root: nothing\n- type: module\n  version: 0.4.0';
-const flat3ToEmptyDiff = '- author: Dmitriy Metelya\n- description: my first project\n- license: ISC\n- main: bin/brain-games.js\n- name: @hexlet/code\n- type: module\n- version: 5.0.1';
+
+const flat3ToFlat4Diff = `  author: Dmitriy Metelya
+- description: my first project
+- license: ISC
+  main: bin/brain-games.js
++ model: first
+  name: @hexlet/code
+  type: module
+- version: 5.0.1
++ version: 0.4.0`;
+
+const flat4ToFlat5Diff = `- author: Dmitriy Metelya
+  main: bin/brain-games.js
+- model: first
+  name: @hexlet/code
++ root: nothing
+- type: module
+  version: 0.4.0`;
+
+const flat3ToEmptyDiff = `- author: Dmitriy Metelya
+- description: my first project
+- license: ISC
+- main: bin/brain-games.js
+- name: @hexlet/code
+- type: module
+- version: 5.0.1`;
+
 const emptyToSelfDiff = '';
-const flat4ToSelfDiff = '  author: Dmitriy Metelya\n  main: bin/brain-games.js\n  model: first\n  name: @hexlet/code\n  type: module\n  version: 0.4.0';
-const flat7ToFlat9Diff = '- name: Test with Jest\n+ name: Linter\n- on: npm\n  runs-on: ubuntu-latest\n- steps: Checkout code\n+ uses: actions/checkout@v2';
-const flat9ToFlat10Diff = '- name: Linter\n+ name: Test coverage with Codeclimate\n+ on: push\n- runs-on: ubuntu-latest\n+ steps: Install package\n  uses: actions/checkout@v2';
-const flat7ToEmptyDiff = '- name: Test with Jest\n- on: npm\n- runs-on: ubuntu-latest\n- steps: Checkout code';
-const flat7ToSelfDiff = '  name: Test with Jest\n  on: npm\n  runs-on: ubuntu-latest\n  steps: Checkout code';
-const flat1ToFlat6Diff = '- author: Dmitriy Metelya\n  model: first\n- name: @hexlet/code\n+ name: Linter\n+ runs-on: ubuntu-latest\n- type: module\n+ uses: actions/checkout@v2';
-const flat8ToFlat2Diff = '+ main: bin/brain-games.js\n- name: Test coverage with Codeclimate\n+ name: @hexlet/code\n  on: push\n+ root: nothing\n- steps: Install package\n- uses: actions/checkout@v2';
-const flat1ToEmptyDiff = '- author: Dmitriy Metelya\n- model: first\n- name: @hexlet/code\n- type: module';
-const flat2ToEqualDiff = '  main: bin/brain-games.js\n  name: @hexlet/code\n  on: push\n  root: nothing';
-const flat3ToFalsyDiff = '- author: Dmitriy Metelya\n- description: my first project\n+ description: undefined\n- license: ISC\n- main: bin/brain-games.js\n+ main: \n- name: @hexlet/code\n+ name: null\n- type: module\n- version: 5.0.1\n+ version: 0';
+
+const flat4ToSelfDiff = `  author: Dmitriy Metelya
+  main: bin/brain-games.js
+  model: first
+  name: @hexlet/code
+  type: module
+  version: 0.4.0`;
+
+const flat7ToFlat9Diff = `- name: Test with Jest
++ name: Linter
+- on: npm
+  runs-on: ubuntu-latest
+- steps: Checkout code
++ uses: actions/checkout@v2`;
+
+const flat9ToFlat10Diff = `- name: Linter
++ name: Test coverage with Codeclimate
++ on: push
+- runs-on: ubuntu-latest
++ steps: Install package
+  uses: actions/checkout@v2`;
+
+const flat7ToEmptyDiff = `- name: Test with Jest
+- on: npm
+- runs-on: ubuntu-latest
+- steps: Checkout code`;
+
+const flat7ToSelfDiff = `  name: Test with Jest
+  on: npm
+  runs-on: ubuntu-latest
+  steps: Checkout code`;
+
+const flat1ToFlat6Diff = `- author: Dmitriy Metelya
+  model: first
+- name: @hexlet/code
++ name: Linter
++ runs-on: ubuntu-latest
+- type: module
++ uses: actions/checkout@v2`;
+
+const flat8ToFlat2Diff = `+ main: bin/brain-games.js
+- name: Test coverage with Codeclimate
++ name: @hexlet/code
+  on: push
++ root: nothing
+- steps: Install package
+- uses: actions/checkout@v2`;
+
+const flat1ToEmptyDiff = `- author: Dmitriy Metelya
+- model: first
+- name: @hexlet/code
+- type: module`;
+
+const flat2ToEqualDiff = `  main: bin/brain-games.js
+  name: @hexlet/code
+  on: push
+  root: nothing`;
+
+const flat3ToFalsyDiff = `- author: Dmitriy Metelya
+- description: my first project
++ description: undefined
+- license: ISC
+- main: bin/brain-games.js
++ main: 
+- name: @hexlet/code
++ name: null
+- type: module
+- version: 5.0.1
++ version: 0`;
+
 const FalsyToSelfDiff = '  description: undefined\n  main: \n  name: null\n  version: 0';
 const EmptyToFalsyDiff = '+ description: undefined\n+ main: \n+ name: null\n+ version: 0';
 
