@@ -1,0 +1,7 @@
+name: Linter
+
+runs-on: ubuntu-latest
+
+uses: actions/checkout@v2
+
+model: first

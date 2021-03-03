@@ -1,0 +1,7 @@
+name: Test with Jest
+
+on: npm
+
+runs-on: ubuntu-latest
+
+steps: Checkout code

@@ -1,0 +1,7 @@
+name: Test coverage with Codeclimate
+
+on: push
+
+steps: Install package
+
+uses: actions/checkout@v2

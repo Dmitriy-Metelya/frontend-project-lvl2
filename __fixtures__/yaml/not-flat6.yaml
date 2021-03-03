@@ -1,0 +1,20 @@
+on:
+  - push
+  - pull_request
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Install package
+        run: make install
+      - name: Check test coverage
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+        run: |
+          ./cc-test-reporter before-build
+          make test-coverage
+          ./cc-test-reporter after-build --exit-code $?

@@ -1,13 +1,11 @@
-import { readFileSync } from 'fs';
 import _ from 'lodash';
+import parseFile from './parsers.js';
 
 const stringify = (diffs) => diffs.join('\n');
 
 const genDiff = (filepath1, filepath2) => {
-  const file1Content = readFileSync(filepath1, 'utf-8');
-  const file1Object = JSON.parse(file1Content);
-  const file2Content = readFileSync(filepath2, 'utf-8');
-  const file2Object = JSON.parse(file2Content);
+  const file1Object = parseFile(filepath1);
+  const file2Object = parseFile(filepath2);
   const leftMergedObject = { ...file2Object, ...file1Object };
   const leftMergedEntries = Object.entries(leftMergedObject);
   const leftMergedEntriesSorted = _.sortBy(leftMergedEntries, ([key]) => key);
