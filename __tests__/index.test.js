@@ -21,6 +21,9 @@ const flat1ToFlat6Diff = '- author: Dmitriy Metelya\n  model: first\n- name: @he
 const flat8ToFlat2Diff = '+ main: bin/brain-games.js\n- name: Test coverage with Codeclimate\n+ name: @hexlet/code\n  on: push\n+ root: nothing\n- steps: Install package\n- uses: actions/checkout@v2';
 const flat1ToEmptyDiff = '- author: Dmitriy Metelya\n- model: first\n- name: @hexlet/code\n- type: module';
 const flat2ToEqualDiff = '  main: bin/brain-games.js\n  name: @hexlet/code\n  on: push\n  root: nothing';
+const flat3ToFalsyDiff = '- author: Dmitriy Metelya\n- description: my first project\n+ description: undefined\n- license: ISC\n- main: bin/brain-games.js\n+ main: \n- name: @hexlet/code\n+ name: null\n- type: module\n- version: 5.0.1\n+ version: 0';
+const FalsyToSelfDiff = '  description: undefined\n  main: \n  name: null\n  version: 0';
+const EmptyToFalsyDiff = '+ description: undefined\n+ main: \n+ name: null\n+ version: 0';
 
 test('common json to json test', () => {
   expect(genDiff(getFixturePath('flat3.json'), getFixturePath('flat4.json'))).toEqual(
@@ -82,5 +85,17 @@ test('extremes json/yaml test', () => {
   );
   expect(genDiff(getFixturePath('flat2.json'), getFixturePath('flat2.yaml'))).toEqual(
     flat2ToEqualDiff,
+  );
+});
+
+test('falsy values test', () => {
+  expect(genDiff(getFixturePath('flat3.json'), getFixturePath('falsy.json'))).toEqual(
+    flat3ToFalsyDiff,
+  );
+  expect(genDiff(getFixturePath('falsy.json'), getFixturePath('falsy.json'))).toEqual(
+    FalsyToSelfDiff,
+  );
+  expect(genDiff(getFixturePath('empty.json'), getFixturePath('falsy.json'))).toEqual(
+    EmptyToFalsyDiff,
   );
 });

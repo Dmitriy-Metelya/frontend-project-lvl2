@@ -12,8 +12,8 @@ const genDiff = (filepath1, filepath2) => {
   const diffs = leftMergedEntriesSorted.reduce((acc, [key, value]) => {
     const newAcc = [...acc];
 
-    if (file1Object[key]) {
-      if (file2Object[key]) {
+    if (Object.prototype.hasOwnProperty.call(file1Object, key)) {
+      if (Object.prototype.hasOwnProperty.call(file2Object, key)) {
         if (value === file2Object[key]) {
           newAcc.push(`  ${key}: ${value}`);
         } else {
