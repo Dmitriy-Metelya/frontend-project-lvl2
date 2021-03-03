@@ -1,3 +1,5 @@
+build: test lint fix-version
+
 test:
 	npm test
 
@@ -7,7 +9,7 @@ test-coverage:
 lint:
 	npx eslint .
 
-build:
+fix-version:
 	./bin/generate-version.js
 	
 publish:
