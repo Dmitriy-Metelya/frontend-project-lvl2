@@ -4,4 +4,4 @@ import { readFileSync, writeFileSync } from 'fs';
 
 const packageJson = readFileSync('./package.json');
 const { version } = JSON.parse(packageJson);
-writeFileSync('./src/version.js', `export default '${version}';\n`, 'utf-8');
+writeFileSync('./src/options/version.js', `export default '${version}';\n`, 'utf-8');
