@@ -1,0 +1,8 @@
+---
+
+project:
+  language: javascript
+  name: Вычислитель отличий
+  link: https://asciinema.org/a/Pe6QypnLEmFWssNAjCOJN1iii
+  summary: |
+    Узнаете, как создавать cli приложения, парсить и форматировать данные в json, yaml. Научитесь проектировать архитектуру приложений. А также писать unit-тесты.
