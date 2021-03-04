@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import parseFile from './parsers.js';
+import parseFile from './diff/parsers.js';
 
 const stringify = (diffs) => diffs.join('\n');
 
