@@ -15,6 +15,9 @@ fix-version:
 publish:
 	npm publish --dry-run
 
+push:
+	git push -u origin main
+
 install:
 	npm ci
 
