@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { sortBy } from 'lodash';
 import parseFile from './diff/parsers.js';
 
 const stringify = (diffs) => diffs.join('\n');
@@ -8,7 +8,7 @@ const genDiff = (filepath1, filepath2) => {
   const file2Object = parseFile(filepath2);
   const leftMergedObject = { ...file2Object, ...file1Object };
   const leftMergedEntries = Object.entries(leftMergedObject);
-  const leftMergedEntriesSorted = _.sortBy(leftMergedEntries, ([key]) => key);
+  const leftMergedEntriesSorted = sortBy(leftMergedEntries, ([key]) => key);
   const diffs = leftMergedEntriesSorted.reduce((acc, [key, value]) => {
     const newAcc = [...acc];
 
