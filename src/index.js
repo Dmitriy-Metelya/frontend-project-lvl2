@@ -1,4 +1,4 @@
-import { sortBy } from 'lodash';
+import { has, sortBy } from 'lodash';
 import parseFile from './diff/parsers.js';
 
 const stringify = (diffs) => diffs.join('\n');
@@ -12,8 +12,8 @@ const genDiff = (filepath1, filepath2) => {
   const diffs = leftMergedEntriesSorted.reduce((acc, [key, value]) => {
     const newAcc = [...acc];
 
-    if (Object.prototype.hasOwnProperty.call(file1Object, key)) {
-      if (Object.prototype.hasOwnProperty.call(file2Object, key)) {
+    if (has(file1Object, key)) {
+      if (has(file2Object, key)) {
         if (value === file2Object[key]) {
           newAcc.push(`  ${key}: ${value}`);
         } else {
