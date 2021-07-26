@@ -109,77 +109,173 @@ const flat3ToFalsyDiff = `- author: Dmitriy Metelya
 const FalsyToSelfDiff = '  description: undefined\n  main: \n  name: null\n  version: 0';
 const EmptyToFalsyDiff = '+ description: undefined\n+ main: \n+ name: null\n+ version: 0';
 
-test('common json to json test', () => {
-  expect(genDiff(getFixturePath('flat3.json'), getFixturePath('flat4.json'))).toEqual(
-    flat3ToFlat4Diff,
-  );
-  expect(genDiff(getFixturePath('flat4.json'), getFixturePath('flat5.json'))).toEqual(
-    flat4ToFlat5Diff,
-  );
-  expect(genDiff(getFixturePath('flat3.json'), getFixturePath('empty.json'))).toEqual(
-    flat3ToEmptyDiff,
-  );
+const nestedJsonDiff = `
+{
+  common: {
+    + follow: false
+      setting1: Value 1
+    - setting2: 200
+    - setting3: true
+    + setting3: null
+    + setting4: blah blah
+    + setting5: {
+          key5: value5
+      }
+      setting6: {
+          doge: {
+            - wow: 
+            + wow: so much
+          }
+          key: value
+        + ops: vops
+      }
+  }
+  group1: {
+    - baz: bas
+    + baz: bars
+      foo: bar
+    - nest: {
+          key: value
+      }
+    + nest: str
+  }
+- group2: {
+      abc: 12345
+      deep: {
+          id: 45
+      }
+  }
++ group3: {
+      deep: {
+          id: {
+              number: 45
+          }
+      }
+      fee: 100500
+  }
+}`;
+
+const nestedYamlDiff = `
+- name: hexlet-check
+- on:
+    push:
+      branches:
+        - '**'
+      tags:
+        - '**'
++ on:
+    - push
+    - pull_request
+  jobs:
+    build:
+      runs-on: ubuntu-latest
+    - steps:
+        - uses: actions/checkout@v2
+        - name: Hexlet project check
+          uses: hexlet/project-action@release
+          with:
+            hexlet-id: hexlet-id
+    + steps:
+        - name: Checkout code
+          uses: actions/checkout@v2
+        - name: Install package
+          run: make install
+        - name: Check test coverage
+          env:
+            CC_TEST_REPORTER_ID: \${{ secrets.CC_TEST_REPORTER_ID }}
+          run: |
+            ./cc-test-reporter before-build
+            make test-coverage
+            ./cc-test-reporter after-build --exit-code $?
+`;
+
+describe('flat file structures', () => {
+  test('common json to json test', () => {
+    expect(genDiff(getFixturePath('flat3.json'), getFixturePath('flat4.json'))).toEqual(
+      flat3ToFlat4Diff,
+    );
+    expect(genDiff(getFixturePath('flat4.json'), getFixturePath('flat5.json'))).toEqual(
+      flat4ToFlat5Diff,
+    );
+    expect(genDiff(getFixturePath('flat3.json'), getFixturePath('empty.json'))).toEqual(
+      flat3ToEmptyDiff,
+    );
+  });
+
+  test('extremes json to json test', () => {
+    expect(genDiff(getFixturePath('empty.json'), getFixturePath('empty.json'))).toEqual(
+      emptyToSelfDiff,
+    );
+    expect(genDiff(getFixturePath('flat4.json'), getFixturePath('flat4.json'))).toEqual(
+      flat4ToSelfDiff,
+    );
+  });
+
+  test('common yaml to yaml test', () => {
+    expect(genDiff(getFixturePath('flat7.yaml'), getFixturePath('flat9.yaml'))).toEqual(
+      flat7ToFlat9Diff,
+    );
+    expect(genDiff(getFixturePath('flat9.yaml'), getFixturePath('flat10.yaml'))).toEqual(
+      flat9ToFlat10Diff,
+    );
+    expect(genDiff(getFixturePath('flat7.yaml'), getFixturePath('empty.yaml'))).toEqual(
+      flat7ToEmptyDiff,
+    );
+  });
+
+  test('extremes yaml to yaml test', () => {
+    expect(genDiff(getFixturePath('empty.yaml'), getFixturePath('empty.yaml'))).toEqual(
+      emptyToSelfDiff,
+    );
+    expect(genDiff(getFixturePath('flat7.yaml'), getFixturePath('flat7.yaml'))).toEqual(
+      flat7ToSelfDiff,
+    );
+  });
+
+  test('common json/yaml test', () => {
+    expect(genDiff(getFixturePath('flat1.json'), getFixturePath('flat6.yaml'))).toEqual(
+      flat1ToFlat6Diff,
+    );
+    expect(genDiff(getFixturePath('flat8.yaml'), getFixturePath('flat2.json'))).toEqual(
+      flat8ToFlat2Diff,
+    );
+    expect(genDiff(getFixturePath('flat1.json'), getFixturePath('empty.yaml'))).toEqual(
+      flat1ToEmptyDiff,
+    );
+  });
+
+  test('extremes json/yaml test', () => {
+    expect(genDiff(getFixturePath('empty.json'), getFixturePath('empty.yaml'))).toEqual(
+      emptyToSelfDiff,
+    );
+    expect(genDiff(getFixturePath('flat2.json'), getFixturePath('flat2.yaml'))).toEqual(
+      flat2ToEqualDiff,
+    );
+  });
+
+  test('falsy values test', () => {
+    expect(genDiff(getFixturePath('flat3.json'), getFixturePath('falsy.json'))).toEqual(
+      flat3ToFalsyDiff,
+    );
+    expect(genDiff(getFixturePath('falsy.json'), getFixturePath('falsy.json'))).toEqual(
+      FalsyToSelfDiff,
+    );
+    expect(genDiff(getFixturePath('empty.json'), getFixturePath('falsy.json'))).toEqual(
+      EmptyToFalsyDiff,
+    );
+  });
 });
 
-test('extremes json to json test', () => {
-  expect(genDiff(getFixturePath('empty.json'), getFixturePath('empty.json'))).toEqual(
-    emptyToSelfDiff,
-  );
-  expect(genDiff(getFixturePath('flat4.json'), getFixturePath('flat4.json'))).toEqual(
-    flat4ToSelfDiff,
-  );
-});
+describe('nested file structures', () => {
+  test('json to json test', () => {
+    expect(genDiff(getFixturePath('file1.json'), getFixturePath('file2.json'))).toEqual(
+      nestedJsonDiff,
+    );
+  });
 
-test('common yaml to yaml test', () => {
-  expect(genDiff(getFixturePath('flat7.yaml'), getFixturePath('flat9.yaml'))).toEqual(
-    flat7ToFlat9Diff,
-  );
-  expect(genDiff(getFixturePath('flat9.yaml'), getFixturePath('flat10.yaml'))).toEqual(
-    flat9ToFlat10Diff,
-  );
-  expect(genDiff(getFixturePath('flat7.yaml'), getFixturePath('empty.yaml'))).toEqual(
-    flat7ToEmptyDiff,
-  );
-});
-
-test('extremes yaml to yaml test', () => {
-  expect(genDiff(getFixturePath('empty.yaml'), getFixturePath('empty.yaml'))).toEqual(
-    emptyToSelfDiff,
-  );
-  expect(genDiff(getFixturePath('flat7.yaml'), getFixturePath('flat7.yaml'))).toEqual(
-    flat7ToSelfDiff,
-  );
-});
-
-test('common json/yaml test', () => {
-  expect(genDiff(getFixturePath('flat1.json'), getFixturePath('flat6.yaml'))).toEqual(
-    flat1ToFlat6Diff,
-  );
-  expect(genDiff(getFixturePath('flat8.yaml'), getFixturePath('flat2.json'))).toEqual(
-    flat8ToFlat2Diff,
-  );
-  expect(genDiff(getFixturePath('flat1.json'), getFixturePath('empty.yaml'))).toEqual(
-    flat1ToEmptyDiff,
-  );
-});
-
-test('extremes json/yaml test', () => {
-  expect(genDiff(getFixturePath('empty.json'), getFixturePath('empty.yaml'))).toEqual(
-    emptyToSelfDiff,
-  );
-  expect(genDiff(getFixturePath('flat2.json'), getFixturePath('flat2.yaml'))).toEqual(
-    flat2ToEqualDiff,
-  );
-});
-
-test('falsy values test', () => {
-  expect(genDiff(getFixturePath('flat3.json'), getFixturePath('falsy.json'))).toEqual(
-    flat3ToFalsyDiff,
-  );
-  expect(genDiff(getFixturePath('falsy.json'), getFixturePath('falsy.json'))).toEqual(
-    FalsyToSelfDiff,
-  );
-  expect(genDiff(getFixturePath('empty.json'), getFixturePath('falsy.json'))).toEqual(
-    EmptyToFalsyDiff,
-  );
+  test('yaml to yaml test', () => {
+    expect(genDiff(getFixturePath('not-flat5.yaml'), getFixturePath('not-flat6.yaml'))).toEqual(
+      nestedYamlDiff,
+    );
+  });
 });
