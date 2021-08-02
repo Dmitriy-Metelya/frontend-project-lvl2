@@ -1,0 +1,16 @@
+{
+  "name": "@hexlet/code",
+  "version": "1.0.0",
+  "description": "format diff generator",
+  "scripts": {
+    "test": "test"
+  },
+  "bin": {
+    "brain-games": "bin/brain-games.js",
+    "brain-calc": "bin/brain-calc.js",
+    "brain-gcd": "brain-gcd.js"
+  },
+  "dependencies": {
+    "lodash": "^4.17.20"
+  }
+}

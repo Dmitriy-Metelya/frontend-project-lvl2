@@ -1,0 +1,16 @@
+{
+  "name": "@hexlet/code",
+  "version": "5.0.1",
+  "type": "module",
+  "bin": {
+    "brain-games": "bin/brain-games.js",
+    "brain-even": "bin/brain-even.js",
+    "brain-gcd": "bin/brain-gcd.js"
+  },
+  "dependencies": {
+    "lodash": "^4.17.20"
+  },
+  "repository": {
+    "type": "git"
+  }
+}
