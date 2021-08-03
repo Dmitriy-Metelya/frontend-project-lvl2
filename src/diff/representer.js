@@ -1,9 +1,9 @@
 import _ from 'lodash';
 
-const { has, keys, sortBy, toPairs, union } = _;
+const { cloneDeep, has, keys, sortBy, toPairs, union } = _;
 
 const getValueType = (value) => {
-  if (typeof value !== 'object') {
+  if (typeof value !== 'object' || value === null) {
     return 'terminal';
   }
 
@@ -27,10 +27,10 @@ const buildDiffForArray = (arrayKey, array, diffStatus, depth) => {
     terminal: buildDiffForTerminal,
   };
 
-  const arrayChildren = array.map((arrayItem) => {
+  const arrayChildren = array.map((arrayItem, index) => {
     const childType = getValueType(arrayItem);
 
-    return mappingDiffBuilderByType[childType]([], arrayItem, 'equal', depth + 1);
+    return mappingDiffBuilderByType[childType](index, arrayItem, 'equal', depth + 1);
   });
 
   return {
@@ -124,6 +124,54 @@ const buildDiffTree = (file1Object, file2Object, depth = 1) => {
   return sortedDiffs;
 };
 
+const buildClosingNode = (structureType, depth) => ({
+  depth,
+  diffStatus: 'equal',
+  type: 'closing',
+  structureType,
+});
+
+const addClosingNodesToDiffTree = (diffTree) => {
+  // We need to have service type of node for the file structure tree which indicates the end of
+  // nested structure. It's necessary for inserting closing marks (brackets, line breaks, etc.) in
+  // formatters.
+
+  const diffTreeWithClosingNodes = [];
+
+  diffTree.forEach((treeNode) => {
+    const node = cloneDeep(treeNode);
+    const { children, depth, type } = node;
+
+    diffTreeWithClosingNodes.push(node);
+
+    if (type === 'object') {
+      const childNodesWithClosingNodes = addClosingNodesToDiffTree(children);
+      const diffTreeWithClosingNodesLength = diffTreeWithClosingNodes.length;
+
+      diffTreeWithClosingNodes[diffTreeWithClosingNodesLength - 1].children =
+        childNodesWithClosingNodes;
+
+      const closingNode = buildClosingNode(type, depth);
+
+      diffTreeWithClosingNodes.push(closingNode);
+    }
+
+    if (type === 'array') {
+      const childNodesWithClosingNodes = addClosingNodesToDiffTree(children);
+      const diffTreeWithClosingNodesLength = diffTreeWithClosingNodes.length;
+
+      diffTreeWithClosingNodes[diffTreeWithClosingNodesLength - 1].children =
+        childNodesWithClosingNodes;
+
+      const closingNode = buildClosingNode(type, depth);
+
+      diffTreeWithClosingNodes.push(closingNode);
+    }
+  });
+
+  return diffTreeWithClosingNodes;
+};
+
 const flattenDiffTree = (diffTree) => {
   let diffTreeNodes = [];
 
@@ -146,7 +194,8 @@ const flattenDiffTree = (diffTree) => {
 
 const representDiff = (file1Object, file2Object) => {
   const diffTree = buildDiffTree(file1Object, file2Object);
-  const diffTreeNodes = flattenDiffTree(diffTree);
+  const diffTreeWithClosingNodes = addClosingNodesToDiffTree(diffTree);
+  const diffTreeNodes = flattenDiffTree(diffTreeWithClosingNodes);
 
   return diffTreeNodes;
 };
