@@ -9,185 +9,239 @@ const getFixturePath = (filename) => {
   return resolve(__dirname, '..', '__fixtures__', format, filename);
 };
 
-const flat3ToFlat4Diff = `  author: Dmitriy Metelya
-- description: my first project
-- license: ISC
-  main: bin/brain-games.js
-+ model: first
-  name: @hexlet/code
-  type: module
-- version: 5.0.1
-+ version: 0.4.0`;
-
-const flat4ToFlat5Diff = `- author: Dmitriy Metelya
-  main: bin/brain-games.js
-- model: first
-  name: @hexlet/code
-+ root: nothing
-- type: module
-  version: 0.4.0`;
-
-const flat3ToEmptyDiff = `- author: Dmitriy Metelya
-- description: my first project
-- license: ISC
-- main: bin/brain-games.js
-- name: @hexlet/code
-- type: module
-- version: 5.0.1`;
-
-const emptyToSelfDiff = '';
-
-const flat4ToSelfDiff = `  author: Dmitriy Metelya
-  main: bin/brain-games.js
-  model: first
-  name: @hexlet/code
-  type: module
-  version: 0.4.0`;
-
-const flat7ToFlat9Diff = `- name: Test with Jest
-+ name: Linter
-- on: npm
-  runs-on: ubuntu-latest
-- steps: Checkout code
-+ uses: actions/checkout@v2`;
-
-const flat9ToFlat10Diff = `- name: Linter
-+ name: Test coverage with Codeclimate
-+ on: push
-- runs-on: ubuntu-latest
-+ steps: Install package
-  uses: actions/checkout@v2`;
-
-const flat7ToEmptyDiff = `- name: Test with Jest
-- on: npm
-- runs-on: ubuntu-latest
-- steps: Checkout code`;
-
-const flat7ToSelfDiff = `  name: Test with Jest
-  on: npm
-  runs-on: ubuntu-latest
-  steps: Checkout code`;
-
-const flat1ToFlat6Diff = `- author: Dmitriy Metelya
-  model: first
-- name: @hexlet/code
-+ name: Linter
-+ runs-on: ubuntu-latest
-- type: module
-+ uses: actions/checkout@v2`;
-
-const flat8ToFlat2Diff = `+ main: bin/brain-games.js
-- name: Test coverage with Codeclimate
-+ name: @hexlet/code
-  on: push
-+ root: nothing
-- steps: Install package
-- uses: actions/checkout@v2`;
-
-const flat1ToEmptyDiff = `- author: Dmitriy Metelya
-- model: first
-- name: @hexlet/code
-- type: module`;
-
-const flat2ToEqualDiff = `  main: bin/brain-games.js
-  name: @hexlet/code
-  on: push
-  root: nothing`;
-
-const flat3ToFalsyDiff = `- author: Dmitriy Metelya
-- description: my first project
-+ description: undefined
-- license: ISC
-- main: bin/brain-games.js
-+ main: 
-- name: @hexlet/code
-+ name: null
-- type: module
-- version: 5.0.1
-+ version: 0`;
-
-const FalsyToSelfDiff = '  description: undefined\n  main: \n  name: null\n  version: 0';
-const EmptyToFalsyDiff = '+ description: undefined\n+ main: \n+ name: null\n+ version: 0';
-
-const nestedJsonDiff = `
-{
-  common: {
-    + follow: false
-      setting1: Value 1
-    - setting2: 200
-    - setting3: true
-    + setting3: null
-    + setting4: blah blah
-    + setting5: {
-          key5: value5
-      }
-      setting6: {
-          doge: {
-            - wow: 
-            + wow: so much
-          }
-          key: value
-        + ops: vops
-      }
-  }
-  group1: {
-    - baz: bas
-    + baz: bars
-      foo: bar
-    - nest: {
-          key: value
-      }
-    + nest: str
-  }
-- group2: {
-      abc: 12345
-      deep: {
-          id: 45
-      }
-  }
-+ group3: {
-      deep: {
-          id: {
-              number: 45
-          }
-      }
-      fee: 100500
-  }
+const flat3ToFlat4Diff = `{
+    author: Dmitriy Metelya
+  - description: my first project
+  - license: ISC
+    main: bin/brain-games.js
+  + model: first
+    name: @hexlet/code
+    type: module
+  - version: 5.0.1
+  + version: 0.4.0
 }`;
 
-const nestedYamlDiff = `
-- name: hexlet-check
-- on:
-    push:
-      branches:
-        - '**'
-      tags:
-        - '**'
-+ on:
-    - push
-    - pull_request
-  jobs:
-    build:
-      runs-on: ubuntu-latest
-    - steps:
-        - uses: actions/checkout@v2
-        - name: Hexlet project check
-          uses: hexlet/project-action@release
-          with:
-            hexlet-id: hexlet-id
-    + steps:
-        - name: Checkout code
-          uses: actions/checkout@v2
-        - name: Install package
-          run: make install
-        - name: Check test coverage
-          env:
-            CC_TEST_REPORTER_ID: \${{ secrets.CC_TEST_REPORTER_ID }}
-          run: |
-            ./cc-test-reporter before-build
-            make test-coverage
-            ./cc-test-reporter after-build --exit-code $?
-`;
+const flat4ToFlat5Diff = `{
+  - author: Dmitriy Metelya
+    main: bin/brain-games.js
+  - model: first
+    name: @hexlet/code
+  + root: nothing
+  - type: module
+    version: 0.4.0
+}`;
+
+const flat3ToEmptyDiff = `{
+  - author: Dmitriy Metelya
+  - description: my first project
+  - license: ISC
+  - main: bin/brain-games.js
+  - name: @hexlet/code
+  - type: module
+  - version: 5.0.1
+}`;
+
+const emptyToSelfDiff = '{}';
+
+const flat4ToSelfDiff = `{
+    author: Dmitriy Metelya
+    main: bin/brain-games.js
+    model: first
+    name: @hexlet/code
+    type: module
+    version: 0.4.0
+}`;
+
+const flat7ToFlat9Diff = `{
+  - name: Test with Jest
+  + name: Linter
+  - on: npm
+    runs-on: ubuntu-latest
+  - steps: Checkout code
+  + uses: actions/checkout@v2
+}`;
+
+const flat9ToFlat10Diff = `{
+  - name: Linter
+  + name: Test coverage with Codeclimate
+  + on: push
+  - runs-on: ubuntu-latest
+  + steps: Install package
+    uses: actions/checkout@v2
+}`;
+
+const flat7ToEmptyDiff = `{
+  - name: Test with Jest
+  - on: npm
+  - runs-on: ubuntu-latest
+  - steps: Checkout code
+}`;
+
+const flat7ToSelfDiff = `{
+    name: Test with Jest
+    on: npm
+    runs-on: ubuntu-latest
+    steps: Checkout code
+}`;
+
+const flat1ToFlat6Diff = `{
+  - author: Dmitriy Metelya
+    model: first
+  - name: @hexlet/code
+  + name: Linter
+  + runs-on: ubuntu-latest
+  - type: module
+  + uses: actions/checkout@v2
+}`;
+
+const flat8ToFlat2Diff = `{
+  + main: bin/brain-games.js
+  - name: Test coverage with Codeclimate
+  + name: @hexlet/code
+    on: push
+  + root: nothing
+  - steps: Install package
+  - uses: actions/checkout@v2
+}`;
+
+const flat1ToEmptyDiff = `{
+  - author: Dmitriy Metelya
+  - model: first
+  - name: @hexlet/code
+  - type: module
+}`;
+
+const flat2ToEqualDiff = `{
+    main: bin/brain-games.js
+    name: @hexlet/code
+    on: push
+    root: nothing
+}`;
+
+const flat3ToFalsyDiff = `{
+  - author: Dmitriy Metelya
+  - description: my first project
+  + description: undefined
+  - license: ISC
+  - main: bin/brain-games.js
+  + main: 
+  - name: @hexlet/code
+  + name: null
+  - type: module
+  - version: 5.0.1
+  + version: 0
+}`;
+
+const FalsyToSelfDiff = `{
+    description: undefined
+    main: 
+    name: null
+    version: 0
+}`;
+
+const EmptyToFalsyDiff = `{
+  + description: undefined
+  + main: 
+  + name: null
+  + version: 0
+}`;
+
+const nestedJsonDiff = `{
+    common: {
+      + follow: false
+        setting1: Value 1
+      - setting2: 200
+      - setting3: true
+      + setting3: null
+      + setting4: blah blah
+      + setting5: {
+            key5: value5
+        }
+        setting6: {
+            doge: {
+              - wow: 
+              + wow: so much
+            }
+            key: value
+          + ops: vops
+        }
+    }
+    group1: {
+      - baz: bas
+      + baz: bars
+        foo: bar
+      - nest: {
+            key: value
+        }
+      + nest: str
+    }
+  - group2: {
+        abc: 12345
+        deep: {
+            id: 45
+        }
+    }
+  + group3: {
+        deep: {
+            id: {
+                number: 45
+            }
+        }
+        fee: 100500
+    }
+}`;
+
+const nestedYamlDiff = `{
+    jobs: {
+        build: {
+            runs-on: ubuntu-latest
+          - steps: [
+                0: {
+                    uses: actions/checkout@v2
+                }
+                1: {
+                    name: Hexlet project check
+                    uses: hexlet/project-action@release
+                    with: {
+                        hexlet-id: hexlet-id
+                    }
+                }
+            ]
+          + steps: [
+                0: {
+                    name: Checkout code
+                    uses: actions/checkout@v2
+                }
+                1: {
+                    name: Install package
+                    run: make install
+                }
+                2: {
+                    name: Check test coverage
+                    env: {
+                        CC_TEST_REPORTER_ID: \${{ secrets.CC_TEST_REPORTER_ID }}
+                    }
+                    run: ./cc-test-reporter before-build
+                }
+            ]
+        }
+    }
+  - name: hexlet-check
+  - on: {
+        push: {
+            branches: [
+                0: **
+            ]
+            tags: [
+                0: **
+            ]
+        }
+    }
+  + on: [
+        0: push
+        1: pull_request
+    ]
+}`;
 
 describe('flat file structures', () => {
   test('common json to json test', () => {
@@ -274,7 +328,7 @@ describe('nested file structures', () => {
   });
 
   test('yaml to yaml test', () => {
-    expect(genDiff(getFixturePath('not-flat5.yaml'), getFixturePath('not-flat6.yaml'))).toEqual(
+    expect(genDiff(getFixturePath('nested1.yaml'), getFixturePath('nested2.yaml'))).toEqual(
       nestedYamlDiff,
     );
   });
