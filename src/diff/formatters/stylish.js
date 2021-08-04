@@ -1,5 +1,3 @@
-const formatItemSimple = (diffRepresenter) => {};
-
 const formatItemStylish = (diffRepresenter) => {
   const getDiffPrefix = (depth, diffStatus) => {
     const mappingByDiffStatus = {
@@ -50,13 +48,4 @@ const formatItemStylish = (diffRepresenter) => {
   return diffIsEmpty ? '{}' : `{\n${diffViewItems.join('\n')}\n}`;
 };
 
-const formatDiff = (diffRepresenter, formatter = 'stylish') => {
-  const mappingByFormatterType = {
-    simple: formatItemSimple,
-    stylish: formatItemStylish,
-  };
-
-  return mappingByFormatterType[formatter](diffRepresenter);
-};
-
-export default formatDiff;
+export default formatItemStylish;
