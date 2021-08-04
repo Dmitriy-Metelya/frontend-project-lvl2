@@ -12,53 +12,72 @@ const getValueType = (value) => {
   return objectType;
 };
 
-const buildDiffForTerminal = (key, value, diffStatus, depth) => ({
+const buildNodePath = (parentPath, ownKey) => {
+  const nodePath = parentPath === undefined ? ownKey : `${parentPath}.${ownKey}`;
+
+  return nodePath;
+};
+
+const buildDiffForTerminal = (key, value, diffStatus, depth, parentPath) => ({
   depth,
   diffStatus,
   key,
+  path: buildNodePath(parentPath, key),
   type: 'terminal',
   value,
 });
 
-const buildDiffForArray = (arrayKey, array, diffStatus, depth) => {
+const buildDiffForArray = (arrayKey, array, diffStatus, depth, parentPath) => {
   const mappingDiffBuilderByType = {
     array: buildDiffForArray,
     object: buildDiffForObjectWithoutNestedDiffs,
     terminal: buildDiffForTerminal,
   };
 
+  const path = buildNodePath(parentPath, arrayKey);
+
   const arrayChildren = array.map((arrayItem, index) => {
     const childType = getValueType(arrayItem);
 
-    return mappingDiffBuilderByType[childType](index, arrayItem, 'equal', depth + 1);
+    return mappingDiffBuilderByType[childType](index, arrayItem, 'equal', depth + 1, path);
   });
 
   return {
     depth,
     diffStatus,
     key: arrayKey,
+    path,
     type: 'array',
     children: arrayChildren,
   };
 };
 
-const buildDiffForObjectWithoutNestedDiffs = (objectKey, objectValue, diffStatus, depth) => {
+const buildDiffForObjectWithoutNestedDiffs = (
+  objectKey,
+  objectValue,
+  diffStatus,
+  depth,
+  parentPath,
+) => {
   const mappingDiffBuilderByType = {
     array: buildDiffForArray,
     object: buildDiffForObjectWithoutNestedDiffs,
     terminal: buildDiffForTerminal,
   };
 
+  const path = buildNodePath(parentPath, objectKey);
+
   const objectChildren = toPairs(objectValue).map(([key, value]) => {
     const childType = getValueType(value);
 
-    return mappingDiffBuilderByType[childType](key, value, 'equal', depth + 1);
+    return mappingDiffBuilderByType[childType](key, value, 'equal', depth + 1, path);
   });
 
   return {
     depth,
     diffStatus,
     key: objectKey,
+    path,
     type: 'object',
     children: objectChildren,
   };
@@ -70,42 +89,51 @@ const mappingDiffBuilderByType = {
   terminal: buildDiffForTerminal,
 };
 
-const buildDiffForObjectWithNestedDiffs = (objectKey, file1Object, file2Object, depth) => {
-  const children = buildDiffTree(file1Object, file2Object, depth + 1);
+const buildDiffForObjectWithNestedDiffs = (
+  objectKey,
+  file1Object,
+  file2Object,
+  depth,
+  parentPath,
+) => {
+  const path = buildNodePath(parentPath, objectKey);
+
+  const children = buildDiffTree(file1Object, file2Object, depth + 1, path);
 
   return {
     depth,
     diffStatus: 'equal',
     key: objectKey,
+    path,
     type: 'object',
     children,
   };
 };
 
-const buildDiffTree = (file1Object, file2Object, depth = 1) => {
+const buildDiffTree = (file1Object, file2Object, depth = 1, path) => {
   const file1ObjectKeys = keys(file1Object);
   const file2ObjectKeys = keys(file2Object);
   const allKeys = union(file1ObjectKeys, file2ObjectKeys);
 
-  const buildDiffForKey = (key, file1Value, file2Value) => {
+  const buildDiffForKey = (key, file1Value, file2Value, parentPath) => {
     if (file1Value === file2Value) {
-      return [buildDiffForTerminal(key, file1Value, 'equal', depth)];
+      return [buildDiffForTerminal(key, file1Value, 'equal', depth, parentPath)];
     }
 
     const value1Type = getValueType(file1Value);
     const value2Type = getValueType(file2Value);
 
     if (value1Type === 'object' && value2Type === 'object') {
-      return [buildDiffForObjectWithNestedDiffs(key, file1Value, file2Value, depth)];
+      return [buildDiffForObjectWithNestedDiffs(key, file1Value, file2Value, depth, parentPath)];
     }
 
     const entry1Diff =
       file1Value !== undefined &&
-      mappingDiffBuilderByType[value1Type](key, file1Value, 'missing', depth);
+      mappingDiffBuilderByType[value1Type](key, file1Value, 'missing', depth, parentPath);
 
     const entry2Diff =
       file2Value !== undefined &&
-      mappingDiffBuilderByType[value2Type](key, file2Value, 'added', depth);
+      mappingDiffBuilderByType[value2Type](key, file2Value, 'added', depth, parentPath);
 
     const diffs = [];
 
@@ -116,7 +144,7 @@ const buildDiffTree = (file1Object, file2Object, depth = 1) => {
   };
 
   const diffs = allKeys
-    .map((key) => buildDiffForKey(key, file1Object[key], file2Object[key]))
+    .map((key) => buildDiffForKey(key, file1Object[key], file2Object[key], path))
     .flat();
 
   const sortedDiffs = sortBy(diffs, ({ key }) => key);
