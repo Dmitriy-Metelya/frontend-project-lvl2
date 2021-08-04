@@ -255,57 +255,9 @@ Property 'group1.nest' was updated. From [complex value] to 'str'
 Property 'group2' was removed
 Property 'group3' was added with value: [complex value]`;
 
-const plainYamlDiff = `{
-  jobs: {
-      build: {
-          runs-on: ubuntu-latest
-        - steps: [
-              0: {
-                  uses: actions/checkout@v2
-              }
-              1: {
-                  name: Hexlet project check
-                  uses: hexlet/project-action@release
-                  with: {
-                      hexlet-id: hexlet-id
-                  }
-              }
-          ]
-        + steps: [
-              0: {
-                  name: Checkout code
-                  uses: actions/checkout@v2
-              }
-              1: {
-                  name: Install package
-                  run: make install
-              }
-              2: {
-                  name: Check test coverage
-                  env: {
-                      CC_TEST_REPORTER_ID: \${{ secrets.CC_TEST_REPORTER_ID }}
-                  }
-                  run: ./cc-test-reporter before-build
-              }
-          ]
-      }
-  }
-- name: hexlet-check
-- on: {
-      push: {
-          branches: [
-              0: **
-          ]
-          tags: [
-              0: **
-          ]
-      }
-  }
-+ on: [
-      0: push
-      1: pull_request
-  ]
-}`;
+const plainYamlDiff = `Property 'jobs.build.steps' was updated. From [complex value] to [complex value]
+Property 'name' was removed
+Property 'on' was updated. From [complex value] to [complex value]`;
 
 describe('Stylish flat file structures', () => {
   test('common json to json test', () => {
