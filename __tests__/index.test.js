@@ -259,6 +259,104 @@ const plainYamlDiff = `Property 'jobs.build.steps' was updated. From [complex va
 Property 'name' was removed
 Property 'on' was updated. From [complex value] to [complex value]`;
 
+const jsonFormatForJsonDiff = `{
+  "common": {
+    "follow": {
+      "diffStatus": "added",
+      "value": false
+    },
+    "setting1": {
+      "diffStatus": "equal",
+      "value": "Value 1"
+    },
+    "setting2": {
+      "diffStatus": "removed",
+      "value": "200"
+    },
+    "setting3": {
+      "diffStatus": "removed",
+      "value": true
+    },
+    "setting3": {
+      "diffStatus": "added",
+      "value": null
+    },
+    "setting4": {
+      "diffStatus": "added",
+      "value": "blah blah"
+    },
+    "setting5": {
+      "key5": {
+        "diffStatus": "equal",
+        "value": "value5"
+      },
+    },
+    "setting6": {
+      "doge": {
+        "wow": {
+          "diffStatus": "updated",
+          "initialValue": "",
+          "updatedValue": "so much"
+        }, 
+      },
+      "key": {
+        "diffStatus": "equal",
+        "value": "value
+      },
+      "ops": {
+        "diffStatus": "added",
+        "value": "vops"
+      }
+    }
+  },
+  group1: {
+    "baz": {
+      "diffStatus": "updated",
+      "initialValue": "bas",
+      "updatedValue": "bars"
+    },
+    "foo": "bar",
+    "nest": {
+      "diffStatus": "updated",
+      "initialValue": "[complex value]",
+      "updatedValue": "str"
+    }
+  },
+  group2: {
+    "diffStatus": "removed",
+    "value": "[complex value]"
+  },
+  group3: {
+    "diffStatus": "added",
+    "value": "[complex value]"
+  }
+}`;
+
+const jsonFormatForYamlDiff = `{
+  "jobs": {
+    "build": {
+      "runs-on": {
+        "diffStatus": "equal",
+        "value": "ubuntu-latest"
+      },
+      steps: {
+        "diffStatus": "updated",
+        "initialValue": "[complex value]",
+        "updatedValue": "[complex value]"
+      }
+    }
+  },
+  name: {
+    "diffStatus": "removed",
+    "value": "hexlet-check"
+  },
+  on: {
+    "diffStatus": "updated",
+    "initialValue": "[complex value]",
+    "updatedValue": "[complex value]"
+  }
+}`;
+
 describe('Stylish flat file structures', () => {
   test('common json to json test', () => {
     expect(genDiff(getFixturePath('flat3.json'), getFixturePath('flat4.json'))).toEqual(
@@ -361,5 +459,19 @@ describe('Plain diff output', () => {
     expect(
       genDiff(getFixturePath('nested1.yaml'), getFixturePath('nested2.yaml'), 'plain'),
     ).toEqual(plainYamlDiff);
+  });
+});
+
+describe('Json diff output', () => {
+  test('json to json test', () => {
+    expect(genDiff(getFixturePath('file1.json'), getFixturePath('file2.json'), 'json')).toEqual(
+      jsonFormatForJsonDiff,
+    );
+  });
+
+  test('yaml to yaml test', () => {
+    expect(genDiff(getFixturePath('nested1.yaml'), getFixturePath('nested2.yaml'), 'json')).toEqual(
+      jsonFormatForYamlDiff,
+    );
   });
 });
