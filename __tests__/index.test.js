@@ -265,31 +265,22 @@ const jsonFormatForJsonDiff = `{
       "diffStatus": "added",
       "value": false
     },
-    "setting1": {
-      "diffStatus": "equal",
-      "value": "Value 1"
-    },
     "setting2": {
       "diffStatus": "removed",
-      "value": "200"
+      "value": 200
     },
     "setting3": {
-      "diffStatus": "removed",
-      "value": true
-    },
-    "setting3": {
-      "diffStatus": "added",
-      "value": null
+      "diffStatus": "updated",
+      "initialValue": true,
+      "updatedValue": null
     },
     "setting4": {
       "diffStatus": "added",
       "value": "blah blah"
     },
     "setting5": {
-      "key5": {
-        "diffStatus": "equal",
-        "value": "value5"
-      },
+      "diffStatus": "added",
+      "value": "[complex value]"
     },
     "setting6": {
       "doge": {
@@ -297,11 +288,7 @@ const jsonFormatForJsonDiff = `{
           "diffStatus": "updated",
           "initialValue": "",
           "updatedValue": "so much"
-        }, 
-      },
-      "key": {
-        "diffStatus": "equal",
-        "value": "value
+        }
       },
       "ops": {
         "diffStatus": "added",
@@ -309,24 +296,23 @@ const jsonFormatForJsonDiff = `{
       }
     }
   },
-  group1: {
+  "group1": {
     "baz": {
       "diffStatus": "updated",
       "initialValue": "bas",
       "updatedValue": "bars"
     },
-    "foo": "bar",
     "nest": {
       "diffStatus": "updated",
       "initialValue": "[complex value]",
       "updatedValue": "str"
     }
   },
-  group2: {
+  "group2": {
     "diffStatus": "removed",
     "value": "[complex value]"
   },
-  group3: {
+  "group3": {
     "diffStatus": "added",
     "value": "[complex value]"
   }
@@ -335,22 +321,18 @@ const jsonFormatForJsonDiff = `{
 const jsonFormatForYamlDiff = `{
   "jobs": {
     "build": {
-      "runs-on": {
-        "diffStatus": "equal",
-        "value": "ubuntu-latest"
-      },
-      steps: {
+      "steps": {
         "diffStatus": "updated",
         "initialValue": "[complex value]",
         "updatedValue": "[complex value]"
       }
     }
   },
-  name: {
+  "name": {
     "diffStatus": "removed",
     "value": "hexlet-check"
   },
-  on: {
+  "on": {
     "diffStatus": "updated",
     "initialValue": "[complex value]",
     "updatedValue": "[complex value]"
