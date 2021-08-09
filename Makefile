@@ -16,7 +16,7 @@ publish:
 	npm publish --dry-run
 
 push:
-	git push -u origin main
+	git push origin main
 
 install:
 	npm ci
