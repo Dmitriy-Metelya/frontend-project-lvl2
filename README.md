@@ -9,3 +9,4 @@ Demo video of basic features and flat JSON files comparing https://asciinema.org
 Demo video of flat YAML-to-YAML and YAML-to-JSON comparing https://asciinema.org/a/yGXCsLB8FVgYpWsUBl4z7up8O
 Demo video of nested file structures comparing https://asciinema.org/a/428683
 Demo video of comparing with 'plain' formatter https://asciinema.org/a/428911
+Demo video of comparing with json formatter https://asciinema.org/a/429783
