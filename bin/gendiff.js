@@ -4,7 +4,6 @@ import { program } from 'commander';
 import { resolve } from 'path';
 import showHelp from '../src/options/help.js';
 import genDiff from '../src/index.js';
-// eslint-disable-next-line import/no-unresolved
 import version from '../src/options/version.js';
 
 const getFullPath = (filepath) => resolve(filepath);

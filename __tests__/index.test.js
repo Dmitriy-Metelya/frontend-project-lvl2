@@ -1,4 +1,4 @@
-/* eslint-disable no-undef */
+/* eslint-disable  no-undef */
 
 import { resolve } from 'path';
 import genDiff from '../src/index';
